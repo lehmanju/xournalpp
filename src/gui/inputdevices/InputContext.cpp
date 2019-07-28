@@ -66,6 +66,7 @@ void InputContext::connect(GtkWidget* pWidget)
 
 			// Touch / Pen / Mouse
 			GDK_TOUCH_MASK |
+			GDK_BUTTON_MOTION_MASK |
 			GDK_POINTER_MOTION_MASK |
 			GDK_BUTTON_PRESS_MASK |
 			GDK_BUTTON_RELEASE_MASK |
