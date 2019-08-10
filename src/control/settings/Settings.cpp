@@ -104,8 +104,6 @@ void Settings::loadDefault()
 	this->snapGrid = true;
 	this->snapGridTolerance = 0.25;
 
-	this->touchWorkaround = false;
-
 	this->defaultSaveName = _("%F-Note-%H-%M");
 
 	// Eraser
@@ -145,7 +143,6 @@ void Settings::loadDefault()
 	this->pluginEnabled = "";
 	this->pluginDisabled = "";
 
-	this->experimentalInputSystemEnabled = false;
 	this->inputSystemTPCButton = false;
 	this->inputSystemDrawOutsideWindow = true;
 
@@ -539,10 +536,6 @@ void Settings::parseItem(xmlDocPtr doc, xmlNodePtr cur)
 	{
 		this->snapGridTolerance = tempg_ascii_strtod((const char*) value, NULL);
 	}
-	else if (xmlStrcmp(name, (const xmlChar*) "touchWorkaround") == 0)
-	{
-		this->touchWorkaround = xmlStrcmp(value, (const xmlChar*) "true") ? false : true;
-	}
 	else if (xmlStrcmp(name, (const xmlChar*) "scrollbarHideType") == 0)
 	{
 		if (xmlStrcmp(value, (const xmlChar*) "both") == 0)
@@ -577,10 +570,6 @@ void Settings::parseItem(xmlDocPtr doc, xmlNodePtr cur)
 	else if (xmlStrcmp(name, (const xmlChar*) "audioOutputDevice") == 0)
 	{
 		this->audioOutputDevice = g_ascii_strtoll((const char *) value, NULL, 10);
-	}
-	else if (xmlStrcmp(name, (const xmlChar*) "experimentalInputSystemEnabled") == 0)
-	{
-		this->experimentalInputSystemEnabled = xmlStrcmp(value, (const xmlChar*) "true") ? false : true;
 	}
 	else if (xmlStrcmp(name, (const xmlChar*) "inputSystemTPCButton") == 0)
 	{
@@ -1003,8 +992,6 @@ void Settings::save()
 	WRITE_BOOL_PROP(snapGrid);
 	WRITE_DOUBLE_PROP(snapGridTolerance);
 
-	WRITE_BOOL_PROP(touchWorkaround);
-
 	WRITE_INT_PROP(selectionBorderColor);
 	WRITE_INT_PROP(backgroundColor);
 	WRITE_INT_PROP(selectionMarkerColor);
@@ -1034,7 +1021,6 @@ void Settings::save()
 	WRITE_BOOL_PROP(doActionOnStrokeFiltered);
 	WRITE_BOOL_PROP(trySelectOnStrokeFiltered);
 
-	WRITE_BOOL_PROP(experimentalInputSystemEnabled);
 	WRITE_BOOL_PROP(inputSystemTPCButton);
 	WRITE_BOOL_PROP(inputSystemDrawOutsideWindow);
 
@@ -1483,26 +1469,6 @@ double Settings::getSnapGridTolerance()
 	XOJ_CHECK_TYPE(Settings);
 
 	return this->snapGridTolerance;
-}
-
-bool Settings::isTouchWorkaround()
-{
-	XOJ_CHECK_TYPE(Settings);
-
-	return this->touchWorkaround;
-}
-
-void Settings::setTouchWorkaround(bool b)
-{
-	XOJ_CHECK_TYPE(Settings);
-
-	if (this->touchWorkaround == b)
-	{
-		return;
-	}
-
-	this->touchWorkaround = b;
-	save();
 }
 
 ScrollbarHideType Settings::getScrollbarHideType()
@@ -2442,26 +2408,6 @@ bool Settings::getTrySelectOnStrokeFiltered()
 {
 	XOJ_CHECK_TYPE(Settings);
 	return this->trySelectOnStrokeFiltered;
-}
-
-
-void Settings::setExperimentalInputSystemEnabled(bool systemEnabled)
-{
-	XOJ_CHECK_TYPE(Settings);
-
-	if (this->experimentalInputSystemEnabled == systemEnabled)
-	{
-		return;
-	}
-	this->experimentalInputSystemEnabled = systemEnabled;
-	save();
-}
-
-bool Settings::getExperimentalInputSystemEnabled()
-{
-	XOJ_CHECK_TYPE(Settings);
-
-	return this->experimentalInputSystemEnabled;
 }
 
 void Settings::setInputSystemTPCButtonEnabled(bool tpcButtonEnabled)

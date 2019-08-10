@@ -20,7 +20,6 @@
 
 class XojPageView;
 class XournalView;
-class ScrollHandling;
 
 
 /**
@@ -32,7 +31,7 @@ class ScrollHandling;
 class Layout
 {
 public:
-	Layout(XournalView* view, ScrollHandling* scrollHandling);
+	Layout(XournalView* view);
 	virtual ~Layout();
 
 public:
@@ -115,8 +114,6 @@ private:
 	XournalView* view = NULL;	
 
 	LayoutMapper mapper;
-
-	ScrollHandling* scrollHandling = NULL;
 
 	double lastScrollHorizontal = -1;
 	double lastScrollVertical = -1;

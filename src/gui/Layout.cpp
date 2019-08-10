@@ -4,8 +4,7 @@
 
 #include "control/Control.h"
 #include "widgets/XournalWidget.h"
-#include "gui/scroll/ScrollHandling.h"
-	
+
 /**
  * Padding outside the pages, including shadow
  */
@@ -27,20 +26,18 @@ const int XOURNAL_ROOM_FOR_SHADOW = 3;
 const int XOURNAL_PADDING_BETWEEN = 15;
 
 
-
-Layout::Layout(XournalView* view, ScrollHandling* scrollHandling)
- : view(view),
-   scrollHandling(scrollHandling)
+Layout::Layout(XournalView* view)
+ : view(view)
 {
 	XOJ_INIT_TYPE(Layout);
 
-	g_signal_connect(scrollHandling->getHorizontal(), "value-changed", G_CALLBACK(horizontalScrollChanged), this);
+	g_signal_connect(view->getHorizontalAdjustment(), "value-changed", G_CALLBACK(horizontalScrollChanged), this);
 
-	g_signal_connect(scrollHandling->getVertical(), "value-changed", G_CALLBACK(verticalScrollChanged), this);
-	
+	g_signal_connect(view->getVerticalAdjustment(), "value-changed", G_CALLBACK(verticalScrollChanged), this);
 
-	lastScrollHorizontal = gtk_adjustment_get_value(scrollHandling->getHorizontal());
-	lastScrollVertical = gtk_adjustment_get_value(scrollHandling->getVertical());
+
+	lastScrollHorizontal = gtk_adjustment_get_value(view->getHorizontalAdjustment());
+	lastScrollVertical = gtk_adjustment_get_value(view->getVerticalAdjustment());
 }
 
 void Layout::horizontalScrollChanged(GtkAdjustment* adjustment, Layout* layout)
@@ -48,7 +45,6 @@ void Layout::horizontalScrollChanged(GtkAdjustment* adjustment, Layout* layout)
 	XOJ_CHECK_TYPE_OBJ(layout, Layout);
 	layout->checkScroll(adjustment, layout->lastScrollHorizontal);
 	layout->updateVisibility();
-	layout->scrollHandling->scrollChanged();
 }
 
 void Layout::verticalScrollChanged(GtkAdjustment* adjustment, Layout* layout)
@@ -56,7 +52,6 @@ void Layout::verticalScrollChanged(GtkAdjustment* adjustment, Layout* layout)
 	XOJ_CHECK_TYPE_OBJ(layout, Layout);
 	layout->checkScroll(adjustment, layout->lastScrollVertical);
 	layout->updateVisibility();
-	layout->scrollHandling->scrollChanged();
 }
 
 Layout::~Layout()
@@ -131,10 +126,10 @@ Rectangle Layout::getVisibleRect()
 {
 	XOJ_CHECK_TYPE(Layout);
 
-	return Rectangle(gtk_adjustment_get_value(scrollHandling->getHorizontal()),
-	                 gtk_adjustment_get_value(scrollHandling->getVertical()),
-	                 gtk_adjustment_get_page_size(scrollHandling->getHorizontal()),
-	                 gtk_adjustment_get_page_size(scrollHandling->getVertical()));
+	return Rectangle(gtk_adjustment_get_value(view->getHorizontalAdjustment()),
+	                 gtk_adjustment_get_value(view->getVerticalAdjustment()),
+	                 gtk_adjustment_get_page_size(view->getHorizontalAdjustment()),
+	                 gtk_adjustment_get_page_size(view->getVerticalAdjustment()));
 }
 
 /**
@@ -237,7 +232,7 @@ void Layout::layoutPages()
 	
 	
 	//Calculate border offset which will center pages in viewing area
-	int visibleWidth = gtk_adjustment_get_page_size(scrollHandling->getHorizontal());
+	int visibleWidth = gtk_adjustment_get_page_size(view->getHorizontalAdjustment());
 	int minRequiredWidth = XOURNAL_PADDING_BETWEEN * (columns-1);
 	for (int c = 0 ; c< columns; c++ )
 	{
@@ -245,8 +240,8 @@ void Layout::layoutPages()
 	}
 	int centeringXBorder = ( visibleWidth - minRequiredWidth )/2;	// this will center if all pages fit on screen.
 
-	
-	int visibleHeight = gtk_adjustment_get_page_size(scrollHandling->getVertical());
+
+	int visibleHeight = gtk_adjustment_get_page_size(view->getVerticalAdjustment());
 	int minRequiredHeight = XOURNAL_PADDING_BETWEEN * (rows-1);
 	for (int r = 0 ; r< rows; r++ )
 	{
@@ -355,8 +350,7 @@ void Layout::setLayoutSize(int width, int height)
 
 	this->layoutHeight = height;
 	this->layoutWidth = width;
-
-	this->scrollHandling->setLayoutSize(width, height);
+	view->queueResize();
 }
 
 void Layout::setSize(int widgetWidth, int widgetHeight)
@@ -383,8 +377,10 @@ void Layout::scrollRelative(double x, double y)
 		return;
 	}
 
-	gtk_adjustment_set_value(scrollHandling->getHorizontal(), gtk_adjustment_get_value(scrollHandling->getHorizontal()) + x);
-	gtk_adjustment_set_value(scrollHandling->getVertical(), gtk_adjustment_get_value(scrollHandling->getVertical()) + y);
+	gtk_adjustment_set_value(view->getHorizontalAdjustment(),
+	                         gtk_adjustment_get_value(view->getHorizontalAdjustment()) + x);
+	gtk_adjustment_set_value(view->getVerticalAdjustment(),
+	                         gtk_adjustment_get_value(view->getVerticalAdjustment()) + y);
 }
 
 void Layout::scrollAbs(double x, double y)
@@ -396,8 +392,8 @@ void Layout::scrollAbs(double x, double y)
 		return;
 	}
 
-	gtk_adjustment_set_value(scrollHandling->getHorizontal(), x);
-	gtk_adjustment_set_value(scrollHandling->getVertical(), y);
+	gtk_adjustment_set_value(view->getHorizontalAdjustment(), x);
+	gtk_adjustment_set_value(view->getVerticalAdjustment(), y);
 }
 
 
@@ -405,8 +401,8 @@ void Layout::ensureRectIsVisible(int x, int y, int width, int height)
 {
 	XOJ_CHECK_TYPE(Layout);
 
-	gtk_adjustment_clamp_page(scrollHandling->getHorizontal(), x - 5, x + width + 10);
-	gtk_adjustment_clamp_page(scrollHandling->getVertical(), y - 5, y + height + 10);
+	gtk_adjustment_clamp_page(view->getHorizontalAdjustment(), x - 5, x + width + 10);
+	gtk_adjustment_clamp_page(view->getVerticalAdjustment(), y - 5, y + height + 10);
 }
 
 
