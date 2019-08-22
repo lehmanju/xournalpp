@@ -152,8 +152,7 @@ Rectangle ZoomControl::getVisibleRect()
 {
 	XOJ_CHECK_TYPE(ZoomControl);
 
-	GtkWidget* widget = view->getWidget();
-	Layout* layout = gtk_xournal_get_layout(widget);
+	Layout* layout = view->getLayout();
 	return layout->getVisibleRect();
 }
 

@@ -663,9 +663,9 @@ PageView* EditSelection::getPageViewUnderCursor()
 	//get grabbing hand position
 	double hx = this->view->getX() + (this->x + this->relMousePosX)*zoom;
 	double hy = this->view->getY() + (this->y + this->relMousePosY)*zoom;
-	
-	
-	Layout* layout = gtk_xournal_get_layout(this->view->getXournal()->getWidget());
+
+
+	Layout* layout = this->view->getXournal()->getLayout();
 	PageView* v = layout->getViewAt(hx,hy);
 
 	return v;

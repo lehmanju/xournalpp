@@ -141,6 +141,7 @@ size_t XournalView::getCurrentPage()
 
 const int scrollKeySize = 30;
 
+//TODO move to input?
 bool XournalView::onKeyPressEvent(GdkEventKey* event)
 {
 	size_t p = getCurrentPage();
@@ -175,8 +176,6 @@ bool XournalView::onKeyPressEvent(GdkEventKey* event)
 	}
 
 	guint state = event->state & gtk_accelerator_get_default_mod_mask();
-
-	Layout* layout = gtk_xournal_get_layout(this->widget);
 
 	if (state & GDK_SHIFT_MASK)
 	{
@@ -468,14 +467,13 @@ void XournalView::scrollTo(size_t pageNo, double yDocument)
 	PageView* v = this->viewPages[pageNo];
 
 	// Make sure it is visible
-	Layout* layout = gtk_xournal_get_layout(this->widget);
 
 	int x = v->getX();
 	int y = v->getY() + yDocument;
 	int width = v->getDisplayWidth();
 	int height = v->getDisplayHeight();
 
-	layout->ensureRectIsVisible(x, y, width, height);
+	this->layout->ensureRectIsVisible(x, y, width, height);
 
 	// Select the page
 	control->firePageSelected(pageNo);
@@ -490,8 +488,7 @@ void XournalView::pageRelativeXY(int offCol, int offRow)
 	int row = view->getMappedRow();
 	int col = view->getMappedCol();
 
-	Layout* layout = gtk_xournal_get_layout(this->widget);
-	int page = layout->getIndexAtGridMap(row + offRow, col + offCol);
+	int page = this->layout->getIndexAtGridMap(row + offRow, col + offCol);
 	if (page >= 0)
 	{
 		this->scrollTo(page, 0);
@@ -982,15 +979,38 @@ bool XournalView::onDraw(GtkWidget *widget, cairo_t *cr, XournalView *view)
 
 		int px = pv->getX();
         int py = pv->getY();
+		int pw = pv->getDisplayWidth();
+		int ph = pv->getDisplayHeight();
 
-        if (!clippingRect.intersects(pv->getRect()))
+		if (!clippingRect.intersects(pv->getRect()))
         {
             continue;
         }
 
-        //TODO draw shadow: gtk_xournal_draw_shadow(widget, cr, px, py, pw, ph, pv->isSelected());
+		if (pv->isSelected())
+		{
+			Shadow::drawShadow(cr, px - 2, py - 2, pw + 4, ph + 4);
 
-        cairo_save(cr);
+			// Draw border
+			Util::cairo_set_source_rgbi(cr, settings->getBorderColor());
+			cairo_set_line_width(cr, 4.0);
+			cairo_set_line_cap(cr, CAIRO_LINE_CAP_BUTT);
+			cairo_set_line_join(cr, CAIRO_LINE_JOIN_BEVEL);
+
+			cairo_move_to(cr, px, py);
+			cairo_line_to(cr, px, py + ph);
+			cairo_line_to(cr, px + pw, py + ph);
+			cairo_line_to(cr, px + pw, py);
+			cairo_close_path(cr);
+
+			cairo_stroke(cr);
+		}
+		else
+		{
+			Shadow::drawShadow(cr, px, py, pw, ph);
+		}
+
+		cairo_save(cr);
         cairo_translate(cr, px, py);
 
         pv->paintPage(cr, nullptr);
@@ -1019,7 +1039,21 @@ void XournalView::onRealized(GtkWidget* widget, XournalView* view)
 
 	// Disable event compression?
 }
+
 GtkClipboard* XournalView::getGtkClipboard()
 {
 	return gtk_widget_get_clipboard(this->widget, GDK_SELECTION_CLIPBOARD);
+}
+
+void XournalView::pageSizeChanged(size_t page)
+{
+	this->layoutPages();
+}
+void XournalView::queueRedraw()
+{
+	gtk_widget_queue_draw(this->widget);
+}
+Layout* XournalView::getLayout()
+{
+	return this->layout;
 }

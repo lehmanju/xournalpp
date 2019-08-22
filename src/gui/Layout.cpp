@@ -3,7 +3,6 @@
 #include "XournalView.h"
 
 #include "control/Control.h"
-#include "widgets/XournalWidget.h"
 
 /**
  * Padding outside the pages, including shadow

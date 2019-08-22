@@ -52,8 +52,6 @@
 
 PageView::PageView(XournalView* xournal, PageRef page)
 {
-	XOJ_INIT_TYPE(PageView);
-
 	this->page = page;
 	this->registerListener(this->page);
 	this->xournal = xournal;
@@ -76,8 +74,6 @@ PageView::PageView(XournalView* xournal, PageRef page)
 
 PageView::~PageView()
 {
-	XOJ_CHECK_TYPE(PageView);
-
 	// Unregister listener before destroying this handler
 	this->unregisterListener();
 
@@ -97,14 +93,10 @@ PageView::~PageView()
 
 	delete this->search;
 	this->search = nullptr;
-
-	XOJ_RELEASE_TYPE(PageView);
 }
 
 void PageView::setIsVisible(bool visible)
 {
-	XOJ_CHECK_TYPE(PageView);
-
 	if (visible)
 	{
 		this->lastVisibleTime = 0;
@@ -119,8 +111,6 @@ void PageView::setIsVisible(bool visible)
 
 int PageView::getLastVisibleTime()
 {
-	XOJ_CHECK_TYPE(PageView);
-
 	if (this->crBuffer == nullptr)
 	{
 		return -1;
@@ -131,8 +121,6 @@ int PageView::getLastVisibleTime()
 
 void PageView::deleteViewBuffer()
 {
-	XOJ_CHECK_TYPE(PageView);
-
 	g_mutex_lock(&this->drawingMutex);
 	if (this->crBuffer)
 	{
@@ -144,8 +132,6 @@ void PageView::deleteViewBuffer()
 
 bool PageView::containsPoint(int x, int y, bool local)
 {
-	XOJ_CHECK_TYPE(PageView);
-
 	if (!local)
 	{
 		bool leftOk = this->getX() <= x;
@@ -163,8 +149,6 @@ bool PageView::containsPoint(int x, int y, bool local)
 
 bool PageView::searchTextOnPage(string& text, int* occures, double* top)
 {
-	XOJ_CHECK_TYPE(PageView);
-
 	if (this->search == nullptr)
 	{
 		if (text.empty()) return true;
@@ -191,8 +175,6 @@ bool PageView::searchTextOnPage(string& text, int* occures, double* top)
 
 void PageView::endText()
 {
-	XOJ_CHECK_TYPE(PageView);
-
 	if (!this->textEditor)
 	{
 		return;

@@ -138,17 +138,17 @@ void RenderJob::run()
 		}
 
 		Control* control = view->getXournal()->getControl();
-		DocumentView view;
-		view.setMarkAudioStroke(control->getToolHandler()->getToolType() == TOOL_PLAY_OBJECT);
-		int width = this->view->page->getWidth();
-		int height = this->view->page->getHeight();
+		DocumentView documentView;
+		documentView.setMarkAudioStroke(control->getToolHandler()->getToolType() == TOOL_PLAY_OBJECT);
+		double width = this->view->page->getWidth();
+		double height = this->view->page->getHeight();
 
 		bool backgroundVisible = this->view->page->isLayerVisible(0);
 		if (backgroundVisible)
 		{
 			PdfView::drawPage(this->view->xournal->getCache(), popplerPage, cr2, zoom, width, height);
 		}
-		view.drawPage(this->view->page, cr2, false);
+		documentView.drawPage(this->view->page, cr2, false);
 
 		cairo_destroy(cr2);
 
@@ -172,7 +172,7 @@ void RenderJob::run()
 	}
 
 	// Schedule a repaint of the widget
-	repaintWidget(this->view->getXournal()->getWidget());
+	Util::execInUiThread([=]() { this->view->getXournal()->queueRedraw(); });
 
 	// delete all rectangles
 	for (Rectangle* rect : rerenderRects)
@@ -180,19 +180,6 @@ void RenderJob::run()
 		delete rect;
 	}
 	rerenderRects.clear();
-}
-
-/**
- * Repaint the widget in UI Thread
- */
-void RenderJob::repaintWidget(GtkWidget* widget)
-{
-	// "this" is not needed, "widget" is in
-	// the closure, therefore no sync needed
-	// Because of this the argument "widget" is needed
-	Util::execInUiThread([=]() {
-		gtk_widget_queue_draw(widget);
-	});
 }
 
 JobType RenderJob::getType()

@@ -115,6 +115,9 @@ public:
 
 	GtkClipboard* getGtkClipboard();
 
+	void queueRedraw();
+	Layout* getLayout();
+
 public:
 	// ZoomListener interface
 	void zoomChanged() override;
@@ -144,7 +147,6 @@ private:
 
 private:
 	ZoomGesture* zoomGesture;
-	ZoomControl* zoomControl;
 
 	GtkWidget* widget = nullptr;
 	Layout* layout = nullptr;
