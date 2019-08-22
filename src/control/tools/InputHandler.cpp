@@ -1,7 +1,7 @@
 #include "InputHandler.h"
 #include "gui/XournalView.h"
 #include "gui/PageView.h"
-#include "gui/widgets/XournalWidget.h"
+#include "gui/widgets/XournalWidget.h.old"
 #include "control/Control.h"
 #include "control/shaperecognizer/ShapeRecognizerResult.h"
 #include "undo/InsertUndoAction.h"
@@ -16,7 +16,7 @@
 
 #define PIXEL_MOTION_THRESHOLD 0.3
 
-InputHandler::InputHandler(XournalView* xournal, XojPageView* redrawable, PageRef page)
+InputHandler::InputHandler(XournalView* xournal, PageView* redrawable, PageRef page)
  : xournal(xournal),
    redrawable(redrawable),
    page(page),

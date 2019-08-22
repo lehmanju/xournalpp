@@ -5,7 +5,7 @@
 #include "undo/InsertUndoAction.h"
 #include <cmath>
 
-ArrowHandler::ArrowHandler(XournalView* xournal, XojPageView* redrawable, PageRef page)
+ArrowHandler::ArrowHandler(XournalView* xournal, PageView* redrawable, PageRef page)
  : BaseStrokeHandler(xournal, redrawable, page)
 {
 	XOJ_INIT_TYPE(ArrowHandler);

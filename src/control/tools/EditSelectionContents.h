@@ -23,7 +23,7 @@
 
 class UndoRedoHandler;
 class Layer;
-class XojPageView;
+class PageView;
 class Selection;
 class Element;
 class UndoAction;
@@ -33,8 +33,8 @@ class DeleteUndoAction;
 class EditSelectionContents : public ElementContainer, public Serializeable
 {
 public:
-	EditSelectionContents(double x, double y, double width, double height,
-						  PageRef sourcePage, Layer* sourceLayer, XojPageView* sourceView);
+	EditSelectionContents(double x, double y, double width, double height, PageRef sourcePage, Layer* sourceLayer,
+	                      PageView* sourceView);
 	virtual ~EditSelectionContents();
 
 public:
@@ -88,12 +88,11 @@ public:
 	/**
 	 * Finish the editing
 	 */
-	void finalizeSelection(double x, double y, double width, double height, bool aspectRatio,
-						   Layer* layer, PageRef targetPage, XojPageView* targetView, UndoRedoHandler* undo);
+	void finalizeSelection(double x, double y, double width, double height, bool aspectRatio, Layer* layer,
+	                       PageRef targetPage, PageView* targetView, UndoRedoHandler* undo);
 
-	void updateContent(double x, double y, double rotation, double width, double height, bool aspectRatio,
-					   Layer* layer, PageRef targetPage, XojPageView* targetView, UndoRedoHandler* undo,
-					   CursorSelectionType type);
+	void updateContent(double x, double y, double rotation, double width, double height, bool aspectRatio, Layer* layer,
+	                   PageRef targetPage, PageView* targetView, UndoRedoHandler* undo, CursorSelectionType type);
 
 private:
 	/**
@@ -112,9 +111,9 @@ public:
 	/**
 	 * Gets the original view of the contents
 	 */
-	XojPageView * getSourceView();
-	
-	
+	PageView* getSourceView();
+
+
 	/**
 	 * Gets the original X of the contents
 	 */
@@ -136,7 +135,7 @@ public:
 	 */
 	double getOriginalHeight();
 
-	UndoAction* copySelection(PageRef page, XojPageView *view, double x, double y);
+	UndoAction* copySelection(PageRef page, PageView* view, double x, double y);
 
 public:
 	// Serialize interface
@@ -198,5 +197,5 @@ private:
 	/**
 	 * Source View for Undo operations
 	 */
-	XojPageView* sourceView;
+	PageView* sourceView;
 };

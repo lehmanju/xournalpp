@@ -14,7 +14,7 @@
 #include "toolbarMenubar/model/ToolbarModel.h"
 #include "toolbarMenubar/ToolMenuHandler.h"
 #include "widgets/SpinPageAdapter.h"
-#include "widgets/XournalWidget.h"
+#include "gui/widgets/XournalWidget.h.old"
 
 #include <config.h>
 #include <config-dev.h>

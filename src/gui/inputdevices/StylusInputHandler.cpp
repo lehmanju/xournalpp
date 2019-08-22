@@ -5,7 +5,7 @@
 #include "StylusInputHandler.h"
 #include "InputContext.h"
 
-#include <gui/widgets/XournalWidget.h>
+#include <gui/widgets/XournalWidget.h.old>
 #include "gui/XournalppCursor.h"
 #include <cmath>
 
@@ -130,7 +130,7 @@ void StylusInputHandler::setPressedState(InputEvent* event)
 {
 	XOJ_CHECK_TYPE(StylusInputHandler);
 
-	XojPageView* currentPage = getPageAtCurrentPosition(event);
+	PageView* currentPage = getPageAtCurrentPosition(event);
 
 	this->inputContext->getXournal()->view->getCursor()->setInsidePage(currentPage != nullptr);
 

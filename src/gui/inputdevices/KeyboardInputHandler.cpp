@@ -2,7 +2,7 @@
 // Created by ulrich on 12.04.19.
 //
 
-#include <gui/widgets/XournalWidget.h>
+#include <gui/widgets/XournalWidget.h.old>
 #include "KeyboardInputHandler.h"
 #include "InputContext.h"
 

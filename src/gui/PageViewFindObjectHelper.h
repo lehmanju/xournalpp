@@ -18,8 +18,8 @@
 class BaseSelectObject
 {
 public:
-	BaseSelectObject(XojPageView* view)
- 	 : view(view),
+	BaseSelectObject(PageView* view)
+	 : view(view),
 	   x(0),
 	   y(0)
 	{
@@ -69,7 +69,7 @@ protected:
 
 protected:
 	GdkRectangle matchRect;
-	XojPageView* view;
+	PageView* view;
 	double x;
 	double y;
 };
@@ -77,8 +77,8 @@ protected:
 class SelectObject : public BaseSelectObject
 {
 public:
-	SelectObject(XojPageView* view)
- 	 : BaseSelectObject(view),
+	SelectObject(PageView* view)
+	 : BaseSelectObject(view),
 	   strokeMatch(NULL),
 	   elementMatch(NULL),
 	   gap(1000000000)
@@ -142,8 +142,8 @@ private:
 class PlayObject : public BaseSelectObject
 {
 public:
-	PlayObject(XojPageView* view)
- 	 : BaseSelectObject(view)
+	PlayObject(PageView* view)
+	 : BaseSelectObject(view)
 	{
 	}
 

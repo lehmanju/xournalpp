@@ -33,11 +33,11 @@ class TextEditor;
 class VerticalToolHandler;
 class XournalView;
 
-class XojPageView : public Redrawable, public PageListener
+class PageView : public Redrawable, public PageListener
 {
 public:
-	XojPageView(XournalView* xournal, PageRef page);
-	virtual ~XojPageView();
+	PageView(XournalView* xournal, PageRef page);
+	virtual ~PageView();
 
 public:
 	void updatePageSize(double width, double height);

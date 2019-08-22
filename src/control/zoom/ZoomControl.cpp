@@ -3,7 +3,7 @@
 #include "control/Control.h"
 #include "gui/Layout.h"
 #include "gui/PageView.h"
-#include "gui/widgets/XournalWidget.h"
+#include "gui/widgets/XournalWidget.h.old"
 #include "gui/XournalView.h"
 
 ZoomControl::ZoomControl()
@@ -188,13 +188,11 @@ void ZoomControl::addZoomListener(ZoomListener* listener)
 	this->listener.push_back(listener);
 }
 
-void ZoomControl::initZoomHandler(GtkWidget* widget, XournalView* view, Control* control)
+void ZoomControl::initZoomHandler(XournalView* view, Control* control)
 {
 	XOJ_CHECK_TYPE(ZoomControl);
 
-	g_signal_connect(widget, "scroll_event", G_CALLBACK(onScrolledwindowMainScrollEvent), this);
-
-	g_signal_connect(widget, "size-allocate", G_CALLBACK(onWidgetSizeChangedEvent), this);
+	//TODO do callbacks on scroll/resize events
 
 	registerListener(control);
 	this->view = view;
@@ -273,7 +271,7 @@ bool ZoomControl::updateZoomFitValue(size_t pageNo)
 	{
 		pageNo = view->getCurrentPage();
 	}
-	XojPageView* page = view->getViewFor(pageNo);
+	PageView* page = view->getViewFor(pageNo);
 	if(!page)
 	{
 		//no page
@@ -307,7 +305,7 @@ bool ZoomControl::updateZoomPresentationValue(size_t pageNo)
 {
 	XOJ_CHECK_TYPE(ZoomControl);
 
-	XojPageView* page = view->getViewFor(view->getCurrentPage());
+	PageView* page = view->getViewFor(view->getCurrentPage());
 	if(!page)
 	{
 		//no page

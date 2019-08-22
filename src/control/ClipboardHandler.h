@@ -35,7 +35,7 @@ public:
 class ClipboardHandler
 {
 public:
-	ClipboardHandler(ClipboardListener* listener, GtkWidget* widget);
+	ClipboardHandler(ClipboardListener* listener, GtkClipboard* gtkClipboard);
 	virtual ~ClipboardHandler();
 
 public:

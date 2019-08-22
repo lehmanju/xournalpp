@@ -14,7 +14,7 @@
 
 #include <gtk/gtkimmulticontext.h>
 
-TextEditor::TextEditor(XojPageView* gui, GtkWidget* widget, Text* text, bool ownText)
+TextEditor::TextEditor(PageView* gui, GtkWidget* widget, Text* text, bool ownText)
  : gui(gui)
  , widget(widget)
  , text(text)

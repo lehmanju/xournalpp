@@ -16,7 +16,7 @@
 class CoordinateSystemHandler : public BaseStrokeHandler
 {
 public:
-	CoordinateSystemHandler(XournalView* xournal, XojPageView* redrawable, PageRef page, bool flipShift = false, bool flipControl = false);
+	CoordinateSystemHandler(XournalView* xournal, PageView* redrawable, PageRef page, bool flipShift = false, bool flipControl = false);
 	virtual ~CoordinateSystemHandler();
 
 private:

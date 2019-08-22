@@ -1,4 +1,4 @@
-#include "XournalWidget.h"
+#include "XournalWidget.h.old"
 
 #include "control/Control.h"
 #include "control/tools/EditSelection.h"
@@ -95,7 +95,7 @@ static void gtk_xournal_class_init(GtkXournalClass* klass)
 	widget_class->destroy = gtk_xournal_destroy;
 }
 
-Rectangle* gtk_xournal_get_visible_area(GtkWidget* widget, XojPageView* p)
+Rectangle* gtk_xournal_get_visible_area(GtkWidget* widget, PageView* p)
 {
 	g_return_val_if_fail(widget != NULL, NULL);
 	g_return_val_if_fail(GTK_IS_XOURNAL(widget), NULL);
@@ -278,7 +278,7 @@ static gboolean gtk_xournal_draw(GtkWidget* widget, cairo_t* cr)
 
 	GtkXournal* xournal = GTK_XOURNAL(widget);
 
-	ArrayIterator<XojPageView*> it = xournal->view->pageViewIterator();
+	ArrayIterator<PageView*> it = xournal->view->pageViewIterator();
 
 	double x1, x2, y1, y2;
 
@@ -294,7 +294,7 @@ static gboolean gtk_xournal_draw(GtkWidget* widget, cairo_t* cr)
 
 	while (it.hasNext())
 	{
-		XojPageView* pv = it.next();
+		PageView* pv = it.next();
 
 		int px = pv->getX();
 		int py = pv->getY();

@@ -18,7 +18,7 @@
 #include "control/zoom/ZoomGesture.h"
 #include "model/DocumentListener.h"
 #include "model/PageRef.h"
-#include "widgets/XournalWidget.h"
+#include "gui/widgets/XournalWidget.h.old"
 
 #include <Arrayiterator.h>
 
@@ -31,7 +31,7 @@ class Document;
 class EditSelection;
 class Layout;
 class PagePositionHandler;
-class XojPageView;
+class PageView;
 class PdfCache;
 class Rectangle;
 class RepaintHandler;
@@ -62,7 +62,7 @@ public:
 
 	void forceUpdatePagenumbers();
 
-	XojPageView* getViewFor(size_t pageNr);
+	PageView* getViewFor(size_t pageNr);
 
 	bool searchTextOnPage(string text, size_t p, int* occures, double* top);
 
@@ -74,7 +74,7 @@ public:
 
 	bool actionDelete();
 
-	void endTextAllPages(XojPageView* except = NULL);
+	void endTextAllPages(PageView* except = NULL);
 
 	void resetShapeRecognizer();
 
@@ -82,13 +82,13 @@ public:
 
 	void ensureRectIsVisible(int x, int y, int width, int height);
 
-	void setSelection(EditSelection* selection);
-	EditSelection* getSelection();
 	void deleteSelection(EditSelection* sel = NULL);
 	void repaintSelection(bool evenWithoutSelection = false);
+	EditSelection* getSelection();
+	void setSelection(EditSelection* sel);
 
 	TextEditor* getTextEditor();
-	ArrayIterator<XojPageView*> pageViewIterator();
+	ArrayIterator<PageView*> pageViewIterator();
 	Control* getControl();
 	double getZoom();
 	int getDpiScaleFactor();
@@ -97,7 +97,7 @@ public:
 	RepaintHandler* getRepaintHandler();
 	XournalppCursor* getCursor();
 
-	Rectangle* getVisibleRect(XojPageView* redrawable);
+	Rectangle* getVisibleRect(PageView* redrawable);
 
 	/**
 	 * @return Helper class for Touch specific fixes
@@ -112,6 +112,8 @@ public:
 
 	GtkAdjustment* getHorizontalAdjustment();
 	GtkAdjustment* getVerticalAdjustment();
+
+	GtkClipboard* getGtkClipboard();
 
 public:
 	// ZoomListener interface
@@ -141,20 +143,16 @@ private:
 	static gboolean clearMemoryTimer(XournalView* widget);
 
 private:
-	XOJ_TYPE_ATTRIB;
-
-	/**
-	 * Scrollbars
-	 */
-
 	ZoomGesture* zoomGesture;
+	ZoomControl* zoomControl;
 
-	GtkWidget* widget = NULL;
+	GtkWidget* widget = nullptr;
+	Layout* layout = nullptr;
 
 	GtkAdjustment* horizontal = nullptr;
 	GtkAdjustment* vertical = nullptr;
 
-	XojPageView** viewPages = NULL;
+	PageView** viewPages = NULL;
 	size_t viewPagesLen = 0;
 
 	Control* control = NULL;
@@ -178,6 +176,8 @@ private:
 	 * Helper class for Touch specific fixes
 	 */
 	HandRecognition* handRecognition = NULL;
+
+	EditSelection* selection = nullptr;
 
 	friend class Layout;
 };

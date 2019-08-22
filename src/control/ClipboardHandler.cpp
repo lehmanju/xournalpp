@@ -14,12 +14,12 @@
 ClipboardListener::~ClipboardListener() {
 }
 
-ClipboardHandler::ClipboardHandler(ClipboardListener* listener, GtkWidget* widget)
+ClipboardHandler::ClipboardHandler(ClipboardListener* listener, GtkClipboard* gtkClipboard)
 {
 	XOJ_INIT_TYPE(ClipboardHandler);
 
 	this->listener = listener;
-	this->clipboard = gtk_widget_get_clipboard(widget, GDK_SELECTION_CLIPBOARD);
+	this->clipboard = gtkClipboard;
 
 	this->hanlderId = g_signal_connect(this->clipboard, "owner-change", G_CALLBACK(&ownerChangedCallback), this);
 

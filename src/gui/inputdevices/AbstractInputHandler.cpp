@@ -53,7 +53,7 @@ bool AbstractInputHandler::handle(InputEvent* event)
  *
  * @return page or NULL if none
  */
-XojPageView* AbstractInputHandler::getPageAtCurrentPosition(InputEvent* event)
+PageView* AbstractInputHandler::getPageAtCurrentPosition(InputEvent* event)
 {
 	XOJ_CHECK_TYPE(AbstractInputHandler);
 
@@ -76,7 +76,7 @@ XojPageView* AbstractInputHandler::getPageAtCurrentPosition(InputEvent* event)
 /**
  * Get input data relative to current input page
  */
-PositionInputData AbstractInputHandler::getInputDataRelativeToCurrentPage(XojPageView* page, InputEvent* event)
+PositionInputData AbstractInputHandler::getInputDataRelativeToCurrentPage(PageView* page, InputEvent* event)
 {
 	XOJ_CHECK_TYPE(AbstractInputHandler);
 

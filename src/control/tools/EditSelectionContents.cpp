@@ -29,7 +29,7 @@
 #include <cmath>
 
 EditSelectionContents::EditSelectionContents(double x, double y, double width, double height, PageRef sourcePage,
-                                             Layer* sourceLayer, XojPageView* sourceView)
+                                             Layer* sourceLayer, PageView* sourceView)
 {
 	XOJ_INIT_TYPE(EditSelectionContents);
 
@@ -390,7 +390,7 @@ double EditSelectionContents::getOriginalHeight()
  * The contents of the selection
  */
 void EditSelectionContents::finalizeSelection(double x, double y, double width, double height, bool aspectRatio,
-                                              Layer* layer, PageRef targetPage, XojPageView* targetView,
+                                              Layer* layer, PageRef targetPage, PageView* targetView,
                                               UndoRedoHandler* undo)
 {
 	XOJ_CHECK_TYPE(EditSelectionContents);
@@ -440,14 +440,14 @@ double EditSelectionContents::getOriginalY()
 	return this->originalY;
 }
 
-XojPageView* EditSelectionContents::getSourceView()
+PageView* EditSelectionContents::getSourceView()
 {
 	return this->sourceView;
 }
 
 
 void EditSelectionContents::updateContent(double x, double y, double rotation, double width, double height,
-                                          bool aspectRatio, Layer* layer, PageRef targetPage, XojPageView* targetView,
+                                          bool aspectRatio, Layer* layer, PageRef targetPage, PageView* targetView,
                                           UndoRedoHandler* undo, CursorSelectionType type)
 {
 	XOJ_CHECK_TYPE(EditSelectionContents);
@@ -591,7 +591,7 @@ void EditSelectionContents::paint(cairo_t* cr, double x, double y, double rotati
 	cairo_restore(cr);
 }
 
-UndoAction* EditSelectionContents::copySelection(PageRef page, XojPageView* view, double x, double y)
+UndoAction* EditSelectionContents::copySelection(PageRef page, PageView* view, double x, double y)
 {
 	XOJ_CHECK_TYPE(EditSelectionContents);
 

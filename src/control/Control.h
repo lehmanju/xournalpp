@@ -37,7 +37,7 @@
 class AudioController;
 class FullscreenHandler;
 class Sidebar;
-class XojPageView;
+class PageView;
 class SaveHandler;
 class GladeSearchpath;
 class MetadataManager;

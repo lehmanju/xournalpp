@@ -22,7 +22,7 @@
 #include "KeyboardInputHandler.h"
 #include "HandRecognition.h"
 
-#include <gui/widgets/XournalWidget.h>
+#include <gui/widgets/XournalWidget.h.old>
 #include <control/ToolHandler.h>
 #include <gui/XournalView.h>
 #include <control/Control.h>

@@ -13,8 +13,8 @@
 guint32 BaseStrokeHandler::lastStrokeTime;		//persist for next stroke
 
 
-
-BaseStrokeHandler::BaseStrokeHandler(XournalView* xournal, XojPageView* redrawable, PageRef page, bool flipShift, bool flipControl)
+BaseStrokeHandler::BaseStrokeHandler(XournalView* xournal, PageView* redrawable, PageRef page, bool flipShift,
+                                     bool flipControl)
  : InputHandler(xournal, redrawable, page)
 {
 	XOJ_INIT_TYPE(BaseStrokeHandler);

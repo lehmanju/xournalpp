@@ -6,7 +6,7 @@
 #include "AbstractInputHandler.h"
 #include "InputContext.h"
 
-#include <gui/widgets/XournalWidget.h>
+#include <gui/widgets/XournalWidget.h.old>
 #include <control/ToolHandler.h>
 #include <gui/XournalppCursor.h>
 #include <gui/inputdevices/PositionInputData.h>
@@ -101,7 +101,7 @@ bool PenInputHandler::actionStart(InputEvent* event)
 
 	this->inputContext->focusWidget();
 
-	XojPageView* currentPage = this->getPageAtCurrentPosition(event);
+	PageView* currentPage = this->getPageAtCurrentPosition(event);
 	// set reference data for handling of entering/leaving page
 	this->updateLastEvent(event);
 
@@ -147,7 +147,7 @@ bool PenInputHandler::actionStart(InputEvent* event)
 	{
 		EditSelection* selection = xournal->selection;
 
-		XojPageView* view = selection->getView();
+		PageView* view = selection->getView();
 		PositionInputData selectionPos = this->getInputDataRelativeToCurrentPage(view, event);
 
 		// Check if event modifies selection instead of page
@@ -231,7 +231,7 @@ bool PenInputHandler::actionMotion(InputEvent* event)
 	else if (xournal->selection)
 	{
 		EditSelection* selection = xournal->selection;
-		XojPageView* view = selection->getView();
+		PageView* view = selection->getView();
 
 		PositionInputData pos = this->getInputDataRelativeToCurrentPage(view, event);
 
@@ -248,9 +248,9 @@ bool PenInputHandler::actionMotion(InputEvent* event)
 	}
 
 	// Check if page was left / entered
-	XojPageView* lastEventPage = getPageAtCurrentPosition(this->lastEvent);
-	XojPageView* lastHitEventPage = getPageAtCurrentPosition(this->lastHitEvent);
-	XojPageView* currentPage = getPageAtCurrentPosition(event);
+	PageView* lastEventPage = getPageAtCurrentPosition(this->lastEvent);
+	PageView* lastHitEventPage = getPageAtCurrentPosition(this->lastHitEvent);
+	PageView* currentPage = getPageAtCurrentPosition(event);
 
 	if (!toolHandler->isSinglePageTool())
 	{
@@ -342,7 +342,7 @@ bool PenInputHandler::actionEnd(InputEvent* event)
 	} else
 	{
 		//Relay the event to the page
-		XojPageView* currentPage = getPageAtCurrentPosition(event);
+		PageView* currentPage = getPageAtCurrentPosition(event);
 
 		/*
 		 * Use the last active page if you can't find a page under the cursor position.
@@ -393,7 +393,7 @@ void PenInputHandler::actionPerform(InputEvent* event)
 	          this->modifier2 ? "true" : "false", this->modifier3 ? "true" : "false");
 #endif
 
-	XojPageView* currentPage = this->getPageAtCurrentPosition(event);
+	PageView* currentPage = this->getPageAtCurrentPosition(event);
 	PositionInputData pos = this->getInputDataRelativeToCurrentPage(currentPage, event);
 	if (event->type == BUTTON_2_PRESS_EVENT)
 	{

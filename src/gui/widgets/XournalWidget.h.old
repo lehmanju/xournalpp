@@ -22,7 +22,7 @@ G_BEGIN_DECLS
 class AbstractInputDevice;
 class EditSelection;
 class Layout;
-class XojPageView;
+class PageView;
 class Rectangle;
 class XournalView;
 class InputContext;
@@ -74,6 +74,6 @@ void gtk_xournal_scroll_relative(GtkWidget* widget, double x, double y);
 
 void gtk_xournal_repaint_area(GtkWidget* widget, int x1, int y1, int x2, int y2);
 
-Rectangle* gtk_xournal_get_visible_area(GtkWidget* widget, XojPageView* p);
+Rectangle* gtk_xournal_get_visible_area(GtkWidget* widget, PageView* p);
 
 G_END_DECLS

@@ -18,7 +18,7 @@
 
 #include "gui/LayoutMapper.h"
 
-class XojPageView;
+class PageView;
 class XournalView;
 
 
@@ -92,7 +92,7 @@ public:
 	 * Return the pageview containing co-ordinates.
 	 * 
 	 */	
-	XojPageView* getViewAt(int x, int y);
+	PageView* getViewAt(int x, int y);
 
 	/**
 	 * Return the page index found ( or -1 if not found) at layout grid row,col

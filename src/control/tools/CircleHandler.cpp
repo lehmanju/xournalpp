@@ -6,7 +6,7 @@
 #include <cmath>
 
 
-CircleHandler::CircleHandler(XournalView* xournal, XojPageView* redrawable, PageRef page, bool flipShift, bool flipControl)
+CircleHandler::CircleHandler(XournalView* xournal, PageView* redrawable, PageRef page, bool flipShift, bool flipControl)
  : BaseStrokeHandler(xournal, redrawable, page, flipShift, flipControl)
 {
 	XOJ_INIT_TYPE(CircleHandler);

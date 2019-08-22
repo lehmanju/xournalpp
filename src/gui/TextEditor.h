@@ -18,12 +18,12 @@
 
 #include <gtk/gtk.h>
 
-class XojPageView;
+class PageView;
 
 class TextEditor
 {
 public:
-	TextEditor(XojPageView* gui, GtkWidget* widget, Text* text, bool ownText);
+	TextEditor(PageView* gui, GtkWidget* widget, Text* text, bool ownText);
 	virtual ~TextEditor();
 
 	/** Represents the different kinds of text selection */
@@ -91,7 +91,7 @@ private:
 private:
 	XOJ_TYPE_ATTRIB;
 
-	XojPageView* gui = nullptr;
+	PageView* gui = nullptr;
 	GtkWidget* widget = nullptr;
 	GtkWidget* textWidget = nullptr;
 	GtkIMContext* imContext = nullptr;

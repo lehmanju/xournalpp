@@ -2,7 +2,7 @@
 // Created by ulrich on 08.04.19.
 //
 
-#include <gui/widgets/XournalWidget.h>
+#include <gui/widgets/XournalWidget.h.old>
 #include "MouseInputHandler.h"
 #include "InputContext.h"
 #include <gui/XournalppCursor.h>
@@ -96,7 +96,7 @@ void MouseInputHandler::setPressedState(InputEvent* event)
 {
 	XOJ_CHECK_TYPE(MouseInputHandler);
 
-	XojPageView* currentPage = getPageAtCurrentPosition(event);
+	PageView* currentPage = getPageAtCurrentPosition(event);
 
 	this->inputContext->getXournal()->view->getCursor()->setInsidePage(currentPage != nullptr);
 

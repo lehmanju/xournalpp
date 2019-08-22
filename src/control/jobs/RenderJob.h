@@ -18,12 +18,12 @@
 #include <gtk/gtk.h>
 
 class Rectangle;
-class XojPageView;
+class PageView;
 
 class RenderJob : public Job
 {
 public:
-	RenderJob(XojPageView* view);
+	RenderJob(PageView* view);
 
 protected:
 	virtual ~RenderJob();
@@ -46,5 +46,5 @@ private:
 private:
 	XOJ_TYPE_ATTRIB;
 
-	XojPageView* view;
+	PageView* view;
 };

@@ -12,7 +12,7 @@
 #include "i18n.h"
 #include "util/cpp14memory.h"
 
-ImageHandler::ImageHandler(Control* control, XojPageView* view)
+ImageHandler::ImageHandler(Control* control, PageView* view)
 {
 	XOJ_INIT_TYPE(ImageHandler);
 

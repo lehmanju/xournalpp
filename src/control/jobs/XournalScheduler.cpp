@@ -23,7 +23,7 @@ void XournalScheduler::removeSidebar(SidebarPreviewBaseEntry* preview)
 	removeSource(preview, JOB_TYPE_PREVIEW, JOB_PRIORITY_HIGH);
 }
 
-void XournalScheduler::removePage(XojPageView* view)
+void XournalScheduler::removePage(PageView* view)
 {
 	XOJ_CHECK_TYPE(XournalScheduler);
 
@@ -136,7 +136,7 @@ void XournalScheduler::addRepaintSidebar(SidebarPreviewBaseEntry* preview)
 	job->unref();
 }
 
-void XournalScheduler::addRerenderPage(XojPageView* view)
+void XournalScheduler::addRerenderPage(PageView* view)
 {
 	XOJ_CHECK_TYPE(XournalScheduler);
 

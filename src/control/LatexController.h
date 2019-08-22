@@ -29,7 +29,7 @@ class Control;
 class TexImage;
 class Text;
 class Document;
-class XojPageView;
+class PageView;
 class Layer;
 
 class LatexController
@@ -196,7 +196,7 @@ private:
 	/**
 	 * Page View
 	 */
-	XojPageView* view = NULL;
+	PageView* view = NULL;
 
 	/**
 	 * Selected Page

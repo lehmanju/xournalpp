@@ -26,7 +26,7 @@
 
 #define MINPIXSIZE 5	// smallest can scale down to, in pixels.
 
-EditSelection::EditSelection(UndoRedoHandler* undo, PageRef page, XojPageView* view)
+EditSelection::EditSelection(UndoRedoHandler* undo, PageRef page, PageView* view)
 {
 	XOJ_INIT_TYPE(EditSelection);
 
@@ -39,7 +39,7 @@ EditSelection::EditSelection(UndoRedoHandler* undo, PageRef page, XojPageView* v
 	contstruct(undo, view, page);
 }
 
-EditSelection::EditSelection(UndoRedoHandler* undo, Selection* selection, XojPageView* view)
+EditSelection::EditSelection(UndoRedoHandler* undo, Selection* selection, PageView* view)
 {
 	XOJ_INIT_TYPE(EditSelection);
 
@@ -56,7 +56,7 @@ EditSelection::EditSelection(UndoRedoHandler* undo, Selection* selection, XojPag
 	view->rerenderPage();
 }
 
-EditSelection::EditSelection(UndoRedoHandler* undo, Element* e, XojPageView* view, PageRef page)
+EditSelection::EditSelection(UndoRedoHandler* undo, Element* e, PageView* view, PageRef page)
 {
 	XOJ_INIT_TYPE(EditSelection);
 
@@ -73,7 +73,7 @@ EditSelection::EditSelection(UndoRedoHandler* undo, Element* e, XojPageView* vie
 	view->rerenderElement(e);
 }
 
-EditSelection::EditSelection(UndoRedoHandler* undo, vector<Element*> elements, XojPageView* view, PageRef page)
+EditSelection::EditSelection(UndoRedoHandler* undo, vector<Element*> elements, PageView* view, PageRef page)
 {
 	XOJ_INIT_TYPE(EditSelection);
 
@@ -121,7 +121,7 @@ void EditSelection::calcSizeFromElements(vector<Element*> elements)
 /**
  * Our internal constructor
  */
-void EditSelection::contstruct(UndoRedoHandler* undo, XojPageView* view, PageRef sourcePage)
+void EditSelection::contstruct(UndoRedoHandler* undo, PageView* view, PageRef sourcePage)
 {
 	XOJ_CHECK_TYPE(EditSelection);
 
@@ -172,7 +172,7 @@ void EditSelection::finalizeSelection()
 {
 	XOJ_CHECK_TYPE(EditSelection);
 
-	XojPageView* v = getPageViewUnderCursor();
+	PageView* v = getPageViewUnderCursor();
 	if (v == NULL)
 	{	// Not on any page - move back to original page and position
 		this->x = this->contents->getOriginalX();
@@ -641,7 +641,7 @@ void EditSelection::mouseMove(double mouseX, double mouseY)
 	
 	this->view->getXournal()->repaintSelection();
 
-	XojPageView* v = getPageViewUnderCursor();
+	PageView* v = getPageViewUnderCursor();
 
 	if (v && v != this->view)
 	{
@@ -654,7 +654,7 @@ void EditSelection::mouseMove(double mouseX, double mouseY)
 	}
 }
 
-XojPageView* EditSelection::getPageViewUnderCursor()
+PageView* EditSelection::getPageViewUnderCursor()
 {
 	XOJ_CHECK_TYPE(EditSelection);
 	
@@ -666,7 +666,7 @@ XojPageView* EditSelection::getPageViewUnderCursor()
 	
 	
 	Layout* layout = gtk_xournal_get_layout(this->view->getXournal()->getWidget());
-	XojPageView* v = layout->getViewAt(hx,hy);
+	PageView* v = layout->getViewAt(hx,hy);
 
 	return v;
 }
@@ -675,7 +675,7 @@ XojPageView* EditSelection::getPageViewUnderCursor()
  * Translate all coordinates which are relative to the current view to the new view,
  * and set the attribute view to the new view
  */
-void EditSelection::translateToView(XojPageView* v)
+void EditSelection::translateToView(PageView* v)
 {
 	XOJ_CHECK_TYPE(EditSelection);
 
@@ -745,7 +745,7 @@ void EditSelection::ensureWithinVisibleArea()
 	int viewy = this->view->getY();
 	double zoom = this->view->getXournal()->getZoom();
 	// need to modify this to take into account the position
-	// of the object, plus typecast because XojPageView takes ints
+	// of the object, plus typecast because PageView takes ints
 	this->view->getXournal()->ensureRectIsVisible((int) (viewx + this->x * zoom), (int) (viewy + this->y * zoom),
 												  (int) (this->width * zoom), (int) (this->height * zoom));
 }
@@ -991,7 +991,7 @@ void EditSelection::drawDeleteRect(cairo_t* cr, double x, double y, double zoom)
 
 
 
-XojPageView* EditSelection::getView()
+PageView* EditSelection::getView()
 {
 	XOJ_CHECK_TYPE(EditSelection);
 

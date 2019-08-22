@@ -337,7 +337,7 @@ void Control::initWindow(MainWindow* win)
 	win->setRecentMenu(recent->getMenu());
 	selectTool(toolHandler->getToolType());
 	this->win = win;
-	this->zoom->initZoomHandler(win->getXournal()->getWidget(), win->getXournal(), this);
+	this->zoom->initZoomHandler(win->getXournal(), this);
 	this->sidebar = new Sidebar(win, this);
 
 	XojMsgBox::setDefaultWindow(getGtkWindow());
@@ -377,7 +377,7 @@ void Control::initWindow(MainWindow* win)
 	toolFillChanged();
 	toolLineStyleChanged();
 
-	this->clipboardHandler = new ClipboardHandler(this, win->getXournal()->getWidget());
+	this->clipboardHandler = new ClipboardHandler(this, win->getXournal()->getGtkClipboard());
 
 	this->enableAutosave(settings->isAutosaveEnabled());
 
@@ -3080,7 +3080,7 @@ void Control::clipboardPaste(Element* e)
 		return;
 	}
 
-	XojPageView* view = win->getXournal()->getViewFor(pageNr);
+	PageView* view = win->getXournal()->getViewFor(pageNr);
 	if (view == nullptr)
 	{
 		return;
@@ -3123,7 +3123,7 @@ void Control::clipboardPasteXournal(ObjectInputStream& in)
 	PageRef page = this->doc->getPage(pNr);
 	Layer* layer = page->getSelectedLayer();
 
-	XojPageView* view = win->getXournal()->getViewFor(pNr);
+	PageView* view = win->getXournal()->getViewFor(pNr);
 
 	if (!view || !page)
 	{

@@ -21,7 +21,7 @@
 
 class DocumentView;
 class XournalView;
-class XojPageView;
+class PageView;
 
 /**
  * @brief A base class to handle pointer input
@@ -33,7 +33,7 @@ class XojPageView;
 class InputHandler
 {
 public:
-	InputHandler(XournalView* xournal, XojPageView* redrawable, PageRef page);
+	InputHandler(XournalView* xournal, PageView* redrawable, PageRef page);
 	virtual ~InputHandler();
 
 public:
@@ -101,7 +101,7 @@ protected:
 
 protected:
 	XournalView* xournal;
-	XojPageView* redrawable;
+	PageView* redrawable;
 	PageRef page;
 	Stroke* stroke;
 

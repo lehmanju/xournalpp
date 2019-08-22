@@ -29,7 +29,7 @@
 
 class XournalView;
 class Control;
-class XojPageView;
+class PageView;
 class ZoomListener;
 class DocumentListener;
 
@@ -124,7 +124,7 @@ public:
 
 	void addZoomListener(ZoomListener* listener);
 
-	void initZoomHandler(GtkWidget* widget, XournalView* view, Control* control);
+	void initZoomHandler(XournalView* view, Control* control);
 
 	/**
 	 * Call this before any zoom is done, it saves the current page and position

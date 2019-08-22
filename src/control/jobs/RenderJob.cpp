@@ -14,7 +14,7 @@
 
 #include <list>
 
-RenderJob::RenderJob(XojPageView* view)
+RenderJob::RenderJob(PageView* view)
  : view(view)
 {
 	XOJ_INIT_TYPE(RenderJob);

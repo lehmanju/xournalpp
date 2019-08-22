@@ -56,7 +56,7 @@ void UndoRedoController::after()
 
 	PageRef page = control->getCurrentPage();
 	size_t pageNo = doc->indexOf(page);
-	XojPageView* view = control->getWindow()->getXournal()->getViewFor(pageNo);
+	PageView* view = control->getWindow()->getXournal()->getViewFor(pageNo);
 
 	if (!view || !page)
 	{

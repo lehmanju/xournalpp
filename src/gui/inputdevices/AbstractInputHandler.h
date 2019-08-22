@@ -38,8 +38,8 @@ protected:
 	bool inputRunning = false;
 
 protected:
-	XojPageView* getPageAtCurrentPosition(InputEvent* event);
-	PositionInputData getInputDataRelativeToCurrentPage(XojPageView* page, InputEvent* event);
+	PageView* getPageAtCurrentPosition(InputEvent* event);
+	PositionInputData getInputDataRelativeToCurrentPage(PageView* page, InputEvent* event);
 
 public:
 	explicit AbstractInputHandler(InputContext* inputContext);

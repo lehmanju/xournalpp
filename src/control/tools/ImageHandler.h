@@ -16,12 +16,12 @@
 #include <gtk/gtk.h>
 
 class Control;
-class XojPageView;
+class PageView;
 
 class ImageHandler
 {
 public:
-	ImageHandler(Control* control, XojPageView* view);
+	ImageHandler(Control* control, PageView* view);
 	virtual ~ImageHandler();
 
 public:
@@ -32,5 +32,5 @@ private:
 	XOJ_TYPE_ATTRIB;
 
 	Control* control;
-	XojPageView* view;
+	PageView* view;
 };
