@@ -11,6 +11,9 @@
 
 #pragma once
 
+#define PAGE_SPACING 10
+//TODO move PAGE_SPACING in a setting
+
 #include "control/zoom/ZoomListener.h"
 #include "control/zoom/ZoomGesture.h"
 #include "model/DocumentListener.h"
@@ -20,6 +23,7 @@
 #include <Arrayiterator.h>
 
 #include <gtk/gtk.h>
+#include <cairo.h>
 
 class Control;
 class XournalppCursor;
@@ -38,16 +42,9 @@ class XournalView : public DocumentListener, public ZoomListener
 {
 public:
 	XournalView(GtkScrolledWindow* parent, Control* control, ZoomGesture* zoomGesture);
-	virtual ~XournalView();
+	~XournalView() override;
 
 public:
-	void zoomIn();
-	void zoomOut();
-
-	bool paint(GtkWidget* widget, GdkEventExpose* event);
-
-	void requestPage(XojPageView* page);
-
 	void layoutPages();
 
 	void scrollTo(size_t pageNo, double y = 0);
@@ -81,9 +78,6 @@ public:
 
 	void resetShapeRecognizer();
 
-	int getDisplayWidth() const;
-	int getDisplayHeight() const;
-
 	bool isPageVisible(size_t page, int* visibleHeight);
 
 	void ensureRectIsVisible(int x, int y, int width, int height);
@@ -101,17 +95,9 @@ public:
 	Document* getDocument();
 	PdfCache* getCache();
 	RepaintHandler* getRepaintHandler();
-	GtkWidget* getWidget();
 	XournalppCursor* getCursor();
 
-	Rectangle* getVisibleRect(int page);
 	Rectangle* getVisibleRect(XojPageView* redrawable);
-
-	/**
-	 * A pen action was detected now, therefore ignore touch events
-	 * for a short time
-	 */
-	void penActionDetected();
 
 	/**
 	 * @return Helper class for Touch specific fixes
@@ -126,8 +112,6 @@ public:
 
 	GtkAdjustment* getHorizontalAdjustment();
 	GtkAdjustment* getVerticalAdjustment();
-
-	void queueResize();
 
 public:
 	// ZoomListener interface
@@ -147,17 +131,14 @@ public:
 	bool onKeyReleaseEvent(GdkEventKey* event);
 
 	static void onRealized(GtkWidget* widget, XournalView* view);
+	static bool onDraw(GtkWidget* widget, cairo_t* cr, XournalView* view);
+	static void onAllocate(GtkWidget* widget, GdkRectangle* rectangle, XournalView* view);
 
 private:
-	void fireZoomChanged();
-
-	void addLoadPageToQue(PageRef page, int priority);
 
 	Rectangle* getVisibleRect(size_t page);
 
 	static gboolean clearMemoryTimer(XournalView* widget);
-
-	static void staticLayoutPages(GtkWidget *widget, GtkAllocation* allocation, void* data);
 
 private:
 	XOJ_TYPE_ATTRIB;
@@ -172,8 +153,6 @@ private:
 
 	GtkAdjustment* horizontal = nullptr;
 	GtkAdjustment* vertical = nullptr;
-
-	double margin = 75;
 
 	XojPageView** viewPages = NULL;
 	size_t viewPagesLen = 0;

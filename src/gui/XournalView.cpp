@@ -37,15 +37,14 @@ XournalView::XournalView(GtkScrolledWindow* parent, Control* control, ZoomGestur
 	this->vertical = gtk_scrolled_window_get_vadjustment(parent);
 
 	auto inputContext = new InputContext(this);
-	this->widget = gtk_xournal_new(this, inputContext);
-
-	// we need to refer widget here, because we unref it somewhere twice!?
-	g_object_ref(this->widget);
+	this->widget = gtk_drawing_area_new();
 
 	gtk_container_add(GTK_CONTAINER(parent), this->widget);
 	gtk_widget_show(this->widget);
 
-	g_signal_connect(getWidget(), "realize", G_CALLBACK(onRealized), this);
+	g_signal_connect(this->widget, "realize", G_CALLBACK(onRealized), this);
+	g_signal_connect(this->widget, "size-allocate", G_CALLBACK(onAllocate), this);
+	g_signal_connect(this->widget, "draw", G_CALLBACK(onDraw), this);
 
 	this->repaintHandler = new RepaintHandler(this);
 	this->handRecognition = new HandRecognition(this->widget, inputContext, control->getSettings());
@@ -92,13 +91,6 @@ XournalView::~XournalView()
 gint pageViewCmpSize(XojPageView* a, XojPageView* b)
 {
 	return a->getLastVisibleTime() - b->getLastVisibleTime();
-}
-
-void XournalView::staticLayoutPages(GtkWidget* widget, GtkAllocation* allocation, void* data)
-{
-	XournalView* xv = (XournalView*) data;
-	XOJ_CHECK_TYPE_OBJ(xv, XournalView);
-	xv->layoutPages();
 }
 
 gboolean XournalView::clearMemoryTimer(XournalView* widget)
@@ -406,21 +398,6 @@ bool XournalView::onKeyReleaseEvent(GdkEventKey* event)
 	return false;
 }
 
-void XournalView::onRealized(GtkWidget* widget, XournalView* view)
-{
-	XOJ_CHECK_TYPE_OBJ(view, XournalView);
-
-	// Disable event compression
-	if (gtk_widget_get_realized(view->getWidget()))
-	{
-		gdk_window_set_event_compression(gtk_widget_get_window(view->getWidget()), false);
-	}
-	else
-	{
-		g_warning("could not disable event compression");
-	}
-}
-
 // send the focus back to the appropriate widget
 void XournalView::requestFocus()
 {
@@ -637,27 +614,6 @@ ZoomGesture* XournalView::getZoomGestureHandler()
 	XOJ_CHECK_TYPE(XournalView);
 
 	return zoomGesture;
-}
-
-GtkWidget* XournalView::getWidget()
-{
-	XOJ_CHECK_TYPE(XournalView);
-
-	return widget;
-}
-
-void XournalView::zoomIn()
-{
-	XOJ_CHECK_TYPE(XournalView);
-
-	control->getZoomControl()->zoomOneStep(ZOOM_IN);
-}
-
-void XournalView::zoomOut()
-{
-	XOJ_CHECK_TYPE(XournalView);
-
-	control->getZoomControl()->zoomOneStep(ZOOM_OUT);
 }
 
 void XournalView::ensureRectIsVisible(int x, int y, int width, int height)
@@ -947,24 +903,6 @@ void XournalView::layoutPages()
 	layout->layoutPages();
 }
 
-int XournalView::getDisplayHeight() const
-{
-	XOJ_CHECK_TYPE(XournalView);
-
-	GtkAllocation allocation = {0};
-	gtk_widget_get_allocation(this->widget, &allocation);
-	return allocation.height;
-}
-
-int XournalView::getDisplayWidth() const
-{
-	XOJ_CHECK_TYPE(XournalView);
-
-	GtkAllocation allocation = {0};
-	gtk_widget_get_allocation(this->widget, &allocation);
-	return allocation.width;
-}
-
 bool XournalView::isPageVisible(size_t page, int* visibleHeight)
 {
 	XOJ_CHECK_TYPE(XournalView);
@@ -1127,7 +1065,56 @@ GtkAdjustment* XournalView::getVerticalAdjustment()
 	return this->vertical;
 }
 
-void XournalView::queueResize()
+bool XournalView::onDraw(GtkWidget *widget, cairo_t *cr, XournalView *view)
 {
-	gtk_widget_queue_resize(this->widget);
+    ArrayIterator<XojPageView*> it = view->pageViewIterator();
+
+    double x1, x2, y1, y2;
+
+    cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+
+    // Draw background in clipped area
+    Settings* settings = view->getControl()->getSettings();
+    Util::cairo_set_source_rgbi(cr, settings->getBackgroundColor());
+    cairo_rectangle(cr, x1, y1, x2 - x1, y2 - y1);
+    cairo_fill(cr);
+
+    // determine which pages need to be rendered, therefore we extend the clipped area by PAGE_SPACING
+    Rectangle clippingRect(x1 - PAGE_SPACING, y1 - PAGE_SPACING, x2 - x1 + 2*PAGE_SPACING, y2 - y1 + 2*PAGE_SPACING);
+
+    while (it.hasNext())
+    {
+        XojPageView* pv = it.next();
+
+        int px = pv->getX();
+        int py = pv->getY();
+
+        if (!clippingRect.intersects(pv->getRect()))
+        {
+            continue;
+        }
+
+        //TODO draw shadow: gtk_xournal_draw_shadow(widget, cr, px, py, pw, ph, pv->isSelected());
+
+        cairo_save(cr);
+        cairo_translate(cr, px, py);
+
+        pv->paintPage(cr, nullptr);
+        cairo_restore(cr);
+    }
+
+    return true;
+}
+
+void XournalView::onAllocate(GtkWidget *widget, GdkRectangle *rectangle, XournalView *view)
+{
+    gtk_widget_set_allocation(widget, rectangle);
+    //TODO call layout setSize
+}
+
+void XournalView::onRealized(GtkWidget* widget, XournalView* view)
+{
+
+
+    // Disable event compression?
 }
