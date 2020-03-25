@@ -4,7 +4,7 @@ parameters:
 
 steps:
   - bash: |
-      ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
+      sudo ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
     displayName: 'Uninstall brew'
   - bash: |
       cd /Users
